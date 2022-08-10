@@ -1,6 +1,6 @@
 console.log("测试一下日志输出");
 
-import sendNotify from "./sendNotify.js";
+const sendNotify =require("./sendNotify.js");
 
 console.log(sendNotify);
 
