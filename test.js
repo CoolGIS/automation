@@ -1,8 +1,11 @@
 console.log("测试一下日志输出");
 
-const sendNotify =require("./sendNotify.js");
+const $ = new Env("测试环境");
+console.log($)
 
-sendNotify.sendNotify("通知头","tongzhiti");
+// const sendNotify =require("./sendNotify.js");
+
+// sendNotify.sendNotify("通知头","tongzhiti");
 
 console.log(process.env.test);
 
