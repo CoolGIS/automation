@@ -84,7 +84,7 @@ async function getMessage(data) {
  * @returns {Promise<void>}
  */
 async function pushMessage(message) {
-  await sendNotify("疫情信息", message, {}, "\n\n本通知By:@Covid19Alert");
+  await sendNotify("疫情信息", message, {}, "\n本通知By:@Covid19Alert");
 }
 
 async function main() {
