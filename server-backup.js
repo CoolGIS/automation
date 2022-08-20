@@ -1,5 +1,5 @@
-const { normalize, join } = require("path");
-const { existsSync } = require("fs");
+const { normalize, join } = require("node:path");
+const { access, constants } = require("node:fs/promises");
 const dayjs = require("dayjs");
 const { conf, zone, form_up, auth, rs } = require("qiniu");
 const { sendNotify } = require("./sendNotify");
@@ -56,15 +56,6 @@ function generateBackupFilePath(backupFileName) {
 }
 
 /**
- * 判断备份文件是否存在
- * @param {string} backupFilePath 备份文件夹路径
- * @returns {boolean} 是否存在
- */
-function hasBackupFile(backupFilePath) {
-  return existsSync(backupFilePath);
-}
-
-/**
  * 上传备份文件
  * @param {string} filePath 备份文件路径
  * @param {conf.Config} uploadConfig 上传配置
@@ -108,11 +99,12 @@ async function main() {
   const { uploadToken, uploadConfig } = generateToken();
   const backupFileName = generateBackupFileName();
   const backupFilePath = generateBackupFilePath(backupFileName);
-  if (hasBackupFile(backupFilePath)) {
+  try {
+    await access(backupFilePath, constants.R_OK);
     uploadFile(backupFilePath, uploadConfig, uploadToken);
-  } else {
-    console.error("备份文件不存在");
-    message += "错误信息：备份文件不存在。";
+  } catch {
+    console.error("无法访问备份文件");
+    message += "错误信息：无法访问备份文件。";
     await pushMessage(message);
   }
 }
